@@ -8,6 +8,7 @@ import { DatabaseModule } from '@database/database.module';
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env'],
+      isGlobal: true,
     }),
     DatabaseModule,
     AdminModule,

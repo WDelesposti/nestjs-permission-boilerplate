@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToMany, JoinTable, PrimaryColumn } from 'typeorm';
-import { BaseEntity } from '@database/entities';
+import { BaseEntity } from '../../../../database/entities/base.entity';
 import { PermissionEntity } from '../permissions/permission.entity';
 import { RoleEntity } from '../roles/role.entity';
 import { UserStatus } from './user-status.enum';

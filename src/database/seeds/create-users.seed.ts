@@ -1,10 +1,10 @@
-import { Connection, In } from 'typeorm';
-import * as _ from 'lodash';
+import { DataSource, In } from 'typeorm';
 import { UserStatus } from '../../modules/admin/access/users/user-status.enum';
 import { UserEntity } from '../../modules/admin/access/users/user.entity';
 import { RoleEntity } from '../../modules/admin/access/roles/role.entity';
 import { PermissionEntity } from '../../modules/admin/access/permissions/permission.entity';
 import { HashHelper } from '../../helpers';
+import * as _ from 'lodash';
 
 const users = [
   {
@@ -46,7 +46,7 @@ const rolePermissions = {
 };
 
 export class CreateUsersSeed {
-  public async run(connection: Connection): Promise<void> {
+  public async run(dataSource: DataSource): Promise<void> {
     const roleNames = Object.keys(rolePermissions);
 
     // Distinct permissions contained in all roles
@@ -61,7 +61,7 @@ export class CreateUsersSeed {
     const permissionSlugs = permissions.map((p) => p.slug);
 
     // Getting existing permissions from the DB
-    const existingPermissions = await connection.manager.find(PermissionEntity, {
+    const existingPermissions = await dataSource.getRepository(PermissionEntity).find({
       where: { slug: In(permissionSlugs) },
     });
 
@@ -75,9 +75,12 @@ export class CreateUsersSeed {
     });
 
     // Creating / updating permissions
-    const savedPermissions = (await connection.manager.save(validPermissions)).reduce((acc, p) => {
-      return { ...acc, [p.slug]: p };
-    }, {});
+    const savedPermissions = (await dataSource.getRepository(PermissionEntity).save(validPermissions)).reduce(
+      (acc, p) => {
+        return { ...acc, [p.slug]: p };
+      },
+      {},
+    );
 
     // Creating roles
     const roles = roleNames.map((name) => {
@@ -85,7 +88,7 @@ export class CreateUsersSeed {
       return new RoleEntity({ name, permissions });
     });
 
-    const savedRoles = connection.manager.save(roles);
+    const savedRoles = dataSource.getRepository(RoleEntity).save(roles);
 
     // Creating users
     const entities = await Promise.all(
@@ -96,6 +99,6 @@ export class CreateUsersSeed {
       }),
     );
 
-    await connection.manager.save(entities);
+    await dataSource.getRepository(UserEntity).save(entities);
   }
 }

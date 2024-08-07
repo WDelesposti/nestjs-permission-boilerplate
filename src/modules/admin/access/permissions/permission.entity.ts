@@ -1,4 +1,4 @@
-import { BaseEntity } from '@database/entities';
+import { BaseEntity } from '../../../../database/entities/base.entity';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ schema: 'admin', name: 'permissions' })

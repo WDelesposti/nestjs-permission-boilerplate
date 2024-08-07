@@ -29,7 +29,7 @@
     "schema:sync": "npm run typeorm schema:sync",
     "typeorm-seeding": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js",
     "seed:config": "npm run typeorm-seeding config",
-    "seed": "npm run typeorm-seeding seed"
+    "seed": "ts-node ./src/database/seeds/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.10",
@@ -44,6 +44,7 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.14.1",
     "compression": "^1.7.4",
+    "dotenv": "^16.4.5",
     "factory.ts": "^0.5.1",
     "faker": "^5.1.0",
     "helmet": "^4.6.0",

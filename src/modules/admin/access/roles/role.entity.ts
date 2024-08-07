@@ -1,4 +1,4 @@
-import { BaseEntity } from '@database/entities';
+import { BaseEntity } from '../../../../database/entities/base.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 import { PermissionEntity } from '../permissions/permission.entity';
 
