@@ -12,13 +12,11 @@ import { DBErrorCode } from '@common/enums';
 import { UserMapper } from './users.mapper';
 import { HashHelper } from '@helpers';
 import { TimeoutError } from 'rxjs';
+import { UserEntity } from './user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(UsersRepository)
-    private usersRepository: UsersRepository,
-  ) {}
+  constructor(@InjectRepository(UserEntity) private readonly usersRepository: UsersRepository) {}
 
   /**
    * Get a paginated user list

@@ -13,7 +13,7 @@ import { ErrorType } from '@common/enums';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    @InjectRepository(UsersRepository)
+    @InjectRepository(UserEntity)
     private userRepository: UsersRepository,
     private consigService: ConfigService,
   ) {

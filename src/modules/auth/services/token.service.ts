@@ -11,11 +11,12 @@ import {
 } from '@common/http/exceptions';
 import { ValidateTokenResponseDto, JwtPayload, TokenDto } from '../dtos';
 import { TokenError, TokenType } from '../enums';
+import { UserEntity } from '@modules/admin/access/users/user.entity';
 
 @Injectable()
 export class TokenService {
   constructor(
-    @InjectRepository(UsersRepository)
+    @InjectRepository(UserEntity)
     private usersRepository: UsersRepository,
     private jwtService: JwtService,
     private configService: ConfigService,

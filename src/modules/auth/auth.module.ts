@@ -1,19 +1,23 @@
-import { UsersRepository } from '../admin/access/users/users.repository';
+import { customUsersRepository, UsersRepository } from '../admin/access/users/users.repository';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtAuthGuard, PermissionsGuard } from './guards';
 import { TokenService, AuthService } from './services';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { getDataSourceToken, getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { JwtStrategy } from './jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { UserEntity } from '@modules/admin/access/users/user.entity';
+import { UsersModule } from '@modules/admin/access/users/users.module';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
+    UsersModule,
     ConfigModule,
-    TypeOrmModule.forFeature([UsersRepository]),
+    TypeOrmModule.forFeature([UserEntity]),
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
@@ -33,6 +37,13 @@ import { JwtModule } from '@nestjs/jwt';
     AuthService,
     JwtStrategy,
     TokenService,
+    {
+      provide: getRepositoryToken(UserEntity),
+      inject: [getDataSourceToken()],
+      useFactory(dataSource: DataSource) {
+        return dataSource.getRepository(UserEntity).extend(customUsersRepository);
+      },
+    },
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

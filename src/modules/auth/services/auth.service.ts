@@ -13,9 +13,9 @@ import { HashHelper } from '@helpers';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UsersRepository)
-    private usersRepository: UsersRepository,
-    private tokenService: TokenService,
+    @InjectRepository(UserEntity)
+    private readonly usersRepository: UsersRepository,
+    private readonly tokenService: TokenService,
   ) {}
 
   /**
