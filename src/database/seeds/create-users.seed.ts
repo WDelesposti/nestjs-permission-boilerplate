@@ -1,4 +1,3 @@
-import { Factory, Seeder } from 'typeorm-seeding';
 import { Connection, In } from 'typeorm';
 import * as _ from 'lodash';
 import { UserStatus } from '../../modules/admin/access/users/user-status.enum';
@@ -17,6 +16,7 @@ const users = [
     status: UserStatus.Active,
   },
 ];
+
 const rolePermissions = {
   Developer: [
     { slug: 'admin.access.users.read', description: 'Read users' },
@@ -45,9 +45,10 @@ const rolePermissions = {
   ],
 };
 
-export default class CreateUsersSeed implements Seeder {
-  public async run(factory: Factory, connection: Connection): Promise<any> {
+export class CreateUsersSeed {
+  public async run(connection: Connection): Promise<void> {
     const roleNames = Object.keys(rolePermissions);
+
     // Distinct permissions contained in all roles
     const permissions = _.uniqBy(
       roleNames.reduce((acc, roleName) => {
@@ -55,12 +56,15 @@ export default class CreateUsersSeed implements Seeder {
       }, []),
       'slug',
     );
+
     // Getting slugs form permissions
     const permissionSlugs = permissions.map((p) => p.slug);
+
     // Getting existing permissions from the DB
     const existingPermissions = await connection.manager.find(PermissionEntity, {
       where: { slug: In(permissionSlugs) },
     });
+
     // Mapping all permissions to permission entities
     const validPermissions = permissions.map((p) => {
       const existing = existingPermissions.find((e) => e.slug === p.slug);
@@ -69,6 +73,7 @@ export default class CreateUsersSeed implements Seeder {
       }
       return new PermissionEntity(p);
     });
+
     // Creating / updating permissions
     const savedPermissions = (await connection.manager.save(validPermissions)).reduce((acc, p) => {
       return { ...acc, [p.slug]: p };
@@ -76,19 +81,21 @@ export default class CreateUsersSeed implements Seeder {
 
     // Creating roles
     const roles = roleNames.map((name) => {
-      const permissions = Promise.resolve(rolePermissions[name].map((p) => savedPermissions[p.slug]));
+      const permissions = rolePermissions[name].map((p) => savedPermissions[p.slug]);
       return new RoleEntity({ name, permissions });
     });
-    const savedRoles = await connection.manager.save(roles);
-    //Creating users
+
+    const savedRoles = connection.manager.save(roles);
+
+    // Creating users
     const entities = await Promise.all(
       users.map(async (u) => {
-        const roles = Promise.resolve(savedRoles);
         const password = await HashHelper.encrypt(u.password);
-        const user = new UserEntity({ ...u, password, roles });
+        const user = new UserEntity({ ...u, password, roles: savedRoles });
         return user;
       }),
     );
+
     await connection.manager.save(entities);
   }
 }

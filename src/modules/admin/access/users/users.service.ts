@@ -49,9 +49,7 @@ export class UsersService {
    * @returns {Promise<UserResponseDto>}
    */
   public async getUserById(id: string): Promise<UserResponseDto> {
-    const userEntity = await this.usersRepository.findOne(id, {
-      relations: ['permissions', 'roles'],
-    });
+    const userEntity = await this.usersRepository.findOne({ where: { id }, relations: ['permissions', 'roles'] });
     if (!userEntity) {
       throw new NotFoundException();
     }
@@ -95,7 +93,7 @@ export class UsersService {
    * @returns {Promise<UserResponseDto>}
    */
   public async updateUser(id: string, userDto: UpdateUserRequestDto): Promise<UserResponseDto> {
-    let userEntity = await this.usersRepository.findOne(id);
+    let userEntity = await this.usersRepository.findOne({ where: { id } });
     if (!userEntity) {
       throw new NotFoundException();
     }
@@ -131,7 +129,7 @@ export class UsersService {
   public async changePassword(changePassword: ChangePasswordRequestDto, userId: string): Promise<UserResponseDto> {
     const { currentPassword, newPassword } = changePassword;
 
-    const userEntity = await this.usersRepository.findOne({ id: userId });
+    const userEntity = await this.usersRepository.findOne({ where: { id: userId } });
 
     if (!userEntity) {
       throw new NotFoundException();

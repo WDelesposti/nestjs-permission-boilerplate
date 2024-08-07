@@ -46,7 +46,7 @@ export class PermissionsService {
    * @returns {Promise<PermissionResponseDto>}
    */
   public async getPermissionById(id: number): Promise<PermissionResponseDto> {
-    const permissionEntity = await this.permissionsRepository.findOne(id);
+    const permissionEntity = await this.permissionsRepository.findOne({ where: { id } });
     if (!permissionEntity) {
       throw new NotFoundException();
     }
@@ -83,7 +83,7 @@ export class PermissionsService {
    * @returns {Promise<PermissionResponseDto>}
    */
   public async updatePermission(id: number, permissionDto: UpdatePermissionRequestDto): Promise<PermissionResponseDto> {
-    let permissionEntity = await this.permissionsRepository.findOne(id);
+    let permissionEntity = await this.permissionsRepository.findOne({ where: { id } });
     if (!permissionEntity) {
       throw new NotFoundException();
     }

@@ -44,9 +44,8 @@ export class RolesService {
    * @returns {Promise<RoleResponseDto>}
    */
   public async getRoleById(id: number): Promise<RoleResponseDto> {
-    const roleEntity = await this.rolesRepository.findOne(id, {
-      relations: ['permissions'],
-    });
+    const roleEntity = await this.rolesRepository.findOne({ where: { id }, relations: ['permissions'] });
+
     if (!roleEntity) {
       throw new NotFoundException();
     }
@@ -89,7 +88,7 @@ export class RolesService {
    * @returns {Promise<RoleResponseDto>}
    */
   public async updateRole(id: number, roleDto: UpdateRoleRequestDto): Promise<RoleResponseDto> {
-    let roleEntity = await this.rolesRepository.findOne(id);
+    let roleEntity = await this.rolesRepository.findOne({ where: { id } });
     if (!roleEntity) {
       throw new NotFoundException();
     }
