@@ -11,7 +11,7 @@
 This is a basic [Nest](https://github.com/nestjs/nest) boilerplate project built on the more powerful node.js framework. The main purpose of this project is to dynamically handle roles and permissions assigned to the user
 
 ## Installation
-- make sure you have [node.js](https://nodejs.org/) installed version 11+
+- make sure you have [node.js](https://nodejs.org/) installed version 20+
 - copy `.env.examaple` to `.env` and set environments for use
 ```bash
 # install nodejs packages
@@ -122,11 +122,6 @@ src
 ├── app.module.ts
 └── main.ts
 ```
-
-## Stay in touch
-
-- Author - [Ferdys Durán](https://github.com/Ferdysd96)
-- Linkedin - [Ferdys Durán](https://www.linkedin.com/in/ferdys-dur%C3%A1n-055a10187/)
 
 ## License
 

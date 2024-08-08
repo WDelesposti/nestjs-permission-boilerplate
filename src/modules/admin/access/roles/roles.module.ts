@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { getDataSourceToken, getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { RolesController } from './roles.controller';
-import { customRolesRepository, RolesRepository } from './roles.repository';
+import { customRolesRepository } from './roles.repository';
 import { RolesService } from './roles.service';
 import { RoleEntity } from './role.entity';
 
