@@ -1,7 +1,6 @@
 import { PaginationRequest } from '@libs/pagination';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { Injectable } from '@nestjs/common';
 
 export interface UsersRepository extends Repository<UserEntity> {
   this: Repository<UserEntity>;

@@ -1,15 +1,19 @@
 import { PaginationRequest } from '@libs/pagination';
-import { EntityRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { RoleEntity } from './role.entity';
 
-@EntityRepository(RoleEntity)
-export class RolesRepository extends Repository<RoleEntity> {
-  /**
-   * Get roles list
-   * @param pagination {PaginationRequest}
-   * @returns [roleEntities: RoleEntity[], totalRoles: number]
-   */
-  public async getRolesAndCount(
+export interface RolesRepository extends Repository<RoleEntity> {
+  this: Repository<RoleEntity>;
+  getRolesAndCount(pagination: PaginationRequest): Promise<[roleEntities: RoleEntity[], totalRoles: number]>;
+}
+/**
+ * Get roles list
+ * @param pagination {PaginationRequest}
+ * @returns [roleEntities: RoleEntity[], totalRoles: number]
+ */
+export const customRolesRepository: Pick<RolesRepository, any> = {
+  async getRolesAndCount(
+    this: Repository<RoleEntity>,
     pagination: PaginationRequest,
   ): Promise<[roleEntities: RoleEntity[], totalRoles: number]> {
     const {
@@ -29,5 +33,5 @@ export class RolesRepository extends Repository<RoleEntity> {
     }
 
     return query.getManyAndCount();
-  }
-}
+  },
+};

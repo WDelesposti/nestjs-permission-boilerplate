@@ -7,13 +7,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DBErrorCode } from '@common/enums';
 import { RoleMapper } from './role.mapper';
 import { TimeoutError } from 'rxjs';
+import { RoleEntity } from './role.entity';
 
 @Injectable()
 export class RolesService {
-  constructor(
-    @InjectRepository(RolesRepository)
-    private rolesRepository: RolesRepository,
-  ) {}
+  constructor(@InjectRepository(RoleEntity) private readonly rolesRepository: RolesRepository) {}
 
   /**
    * Get a paginated role list
