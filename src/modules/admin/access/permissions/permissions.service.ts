@@ -7,11 +7,12 @@ import { PermissionMapper } from './permission.mapper';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DBErrorCode } from '@common/enums';
 import { TimeoutError } from 'rxjs';
+import { PermissionEntity } from './permission.entity';
 
 @Injectable()
 export class PermissionsService {
   constructor(
-    @InjectRepository(PermissionsRepository)
+    @InjectRepository(PermissionEntity)
     private permissionsRepository: PermissionsRepository,
   ) {}
 

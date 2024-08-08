@@ -1,15 +1,21 @@
 import { PaginationRequest } from '@libs/pagination';
-import { EntityRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { PermissionEntity } from './permission.entity';
 
-@EntityRepository(PermissionEntity)
-export class PermissionsRepository extends Repository<PermissionEntity> {
-  /**
-   * Get permision list
-   * @param pagination {PaginationRequest}
-   * @returns permissionEntities[] and totalPermissions
-   */
-  public async getPermissionsAndCount(
+export interface PermissionsRepository extends Repository<PermissionEntity> {
+  this: Repository<PermissionEntity>;
+  getPermissionsAndCount(
+    pagination: PaginationRequest,
+  ): Promise<[permissionEntities: PermissionEntity[], totalPermissions: number]>;
+}
+/**
+ * Get permision list
+ * @param pagination {PaginationRequest}
+ * @returns permissionEntities[] and totalPermissions
+ */
+export const customPermissionsRepository: Pick<PermissionsRepository, any> = {
+  async getPermissionsAndCount(
+    this: Repository<PermissionEntity>,
     pagination: PaginationRequest,
   ): Promise<[permissionEntities: PermissionEntity[], totalPermissions: number]> {
     const {
@@ -27,5 +33,5 @@ export class PermissionsRepository extends Repository<PermissionEntity> {
     }
 
     return query.getManyAndCount();
-  }
-}
+  },
+};
