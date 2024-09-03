@@ -85,7 +85,7 @@ export class TokenService {
         return { valid: false };
       }
 
-      return { valid: !!id };
+      return { valid: !!id, user };
     } catch (error) {
       Logger.error('Validation token error', error);
       return { valid: false };
