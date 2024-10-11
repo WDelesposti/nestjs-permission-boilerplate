@@ -24,7 +24,7 @@
     "migration:gen": "npm run typeorm migration:generate -- -n",
     "migrate": "npm run typeorm migration:run -- -t=false -d src/database/database.providers.ts",
     "migration:show": "npm run typeorm migration:show",
-    "rollback": "npm run typeorm migration:revert",
+    "rollback": "npm run typeorm migration:revert -- -t=false -d src/database/database.providers.ts",
     "schema:drop": "npm run typeorm schema:drop",
     "schema:sync": "npm run typeorm schema:sync",
     "seed": "ts-node ./src/database/seeds/seed.ts"

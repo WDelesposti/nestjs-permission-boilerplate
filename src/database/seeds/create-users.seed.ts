@@ -94,7 +94,8 @@ export class CreateUsersSeed {
     const entities = await Promise.all(
       users.map(async (u) => {
         const password = await HashHelper.encrypt(u.password);
-        const user = new UserEntity({ ...u, password, roles: savedRoles });
+        const roles = await savedRoles;
+        const user = new UserEntity({ ...u, password, roles: Promise.resolve(roles) });
         return user;
       }),
     );
